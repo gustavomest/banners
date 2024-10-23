@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBannerRequest;
+use App\Http\Requests\UpdateBannerRequest;
 use App\Models\Banner;
-use Illuminate\Http\Request;
+use Nette\Utils\FileSystem;
 
 class BannerController extends Controller
 {
@@ -24,20 +26,20 @@ class BannerController extends Controller
     }
 
     // Armazenar um novo banner
-    public function store(Request $request)
+    public function store(StoreBannerRequest $request)
     {
-        $request->validate([
-            'titulo' => 'required|string|max:255',
-            'plataforma' => 'required|string|max:255',
-            'campanha' => 'required|string|max:255',
-            'formato' => 'required|string|max:255',
-            'empresa' => 'required|string|max:255',
-            'tipo' => 'required|string|max:255',
-        ]);
+        $validated = $request->safe()->except(['midia']);
+
+        // salva a midia em uploads
+        $fileName = time().'.'.$request->midia->extension();
+        $request->midia->move(public_path('uploads'), $fileName);
+
+        // guarda o nome da midia para usar depois
+        $validated['midia'] = $fileName;
 
         Banner::create($request->all());
 
-        return redirect()->route('banners.index')->with('success', 'Banner criado com sucesso!');
+        return redirect()->route('banners.index');
     }
 
     // Mostrar o formulário para editar um banner
@@ -50,21 +52,24 @@ class BannerController extends Controller
     }
 
     // Atualizar um banner existente
-    public function update(Request $request, $id)
+    public function update(UpdateBannerRequest $request, $id)
     {
-        $request->validate([
-            'titulo' => 'string|max:255',
-            'plataforma' => 'string|max:255',
-            'campanha' => 'string|max:255',
-            'formato' => 'string|max:255',
-            'empresa' => 'string|max:255',
-            'tipo' => 'string|max:255',
-        ]);
+        $validated = $request->safe()->except(['midia']);
+
+        // salva a midia em uploads
+        $fileName = time().'.'.$request->midia->extension();
+        $request->midia->move(public_path('uploads'), $fileName);
+
+        // guarda o nome da midia para usar depois
+        $validated['midia'] = $fileName;
 
         $banner = Banner::findOrFail($id);
-        $banner->update($request->all());
+        // remove a midia antiga
+        FileSystem::delete(public_path('uploads/'.$banner->caminho_arquivo));
 
-        return redirect()->route('banners.index')->with('success', 'Banner atualizado com sucesso!');
+        $banner->update($validated);
+
+        return redirect()->route('banners.index');
     }
 
     // Excluir um banner
@@ -73,6 +78,6 @@ class BannerController extends Controller
         $banner = Banner::findOrFail($id);
         $banner->delete();
 
-        return redirect()->route('banners.index')->with('success', 'Banner excluído com sucesso!');
+        return redirect()->route('banners.index');
     }
 }
