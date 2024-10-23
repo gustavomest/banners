@@ -831,7 +831,41 @@
 </head>
 
 <body class="antialiased">
-    top
+   <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ isset($banner) ? __('Editar Banner') : __('Banners') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+
+
+                    <h3 class="mt-6">Lista de Banners</h3>
+                    <ul>
+                        @foreach($banners as $banner)
+                            <li class="flex justify-between items-center">
+                                <span>{{ $banner->titulo }} - {{ $banner->plataforma }}</span>
+                                <div>
+                                    <a href="{{ route('banners.edit', $banner->id) }}" class="text-blue-600">Editar</a>
+                                    <form action="{{ route('banners.destroy', $banner->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600">Excluir</button>
+                                    </form>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
 </body>
 
 </html>
