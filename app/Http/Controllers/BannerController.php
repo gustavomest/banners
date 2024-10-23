@@ -11,7 +11,7 @@ class BannerController extends Controller
     public function index()
     {
         $banners = Banner::all();
-        return view('banners', compact('banners'));
+        return view('welcome', compact('banners'));
     }
 
     // Mostrar o formulário para criar um novo banner
