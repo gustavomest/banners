@@ -15,8 +15,60 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
-});
+    $mock = [
+        [
+            'arquivo' => 'UOL - 1190x330',
+            'titulo' => 'BANNERS SEST SENAT',
+            'plataforma' => 'HTML5',
+            'campanha' => 'VALORIZAÇÃO DA ENGENHARIA',
+            'resolucao' => '1190x330',
+            'peso' => '0 Bytes',
+            'tempo' => '00:00:00',
+            'formato' => 'html',
+            'empresa' => 'SEST',
+            'tipo' => 'Desenvo',
+        ],
+        [
+            'arquivo' => 'GLOBO.COM - 970x150',
+            'titulo' => 'BANNERS SEST SENAT',
+            'plataforma' => 'HTML5',
+            'campanha' => 'VALORIZAÇÃO DA ENGENHARIA',
+            'resolucao' => '970x150',
+            'peso' => '0 Bytes',
+            'tempo' => '00:00:00',
+            'formato' => 'html',
+            'empresa' => 'SEST',
+            'tipo' => 'Desenvo',
+        ],
+        [
+            'arquivo' => 'GLOBO.COM - 300x600',
+            'titulo' => 'BANNERS SEST SENAT',
+            'plataforma' => 'HTML5',
+            'campanha' => 'VALORIZAÇÃO DA ENGENHARIA',
+            'resolucao' => '300x600',
+            'peso' => '0 Bytes',
+            'tempo' => '00:00:00',
+            'formato' => 'html',
+            'empresa' => 'SEST',
+            'tipo' => 'Desenvo',
+        ],
+        [
+            'arquivo' => 'EDITORA GLOBO - 1190x250',
+            'titulo' => 'BANNERS SEST SENAT',
+            'plataforma' => 'HTML5',
+            'campanha' => 'VALORIZAÇÃO DA ENGENHARIA',
+            'resolucao' => '1190x250',
+            'peso' => '0 Bytes',
+            'tempo' => '00:00:00',
+            'formato' => 'html',
+            'empresa' => 'SEST',
+            'tipo' => 'Desenvo',
+        ],
+    ];
+
+    return view('main', ['items' => $mock]);
+})
+    ->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
